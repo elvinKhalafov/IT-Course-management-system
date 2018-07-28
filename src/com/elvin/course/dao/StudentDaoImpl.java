@@ -37,16 +37,16 @@ public class StudentDaoImpl implements StudentDao {
             while (rs.next()) {
                 Student student = new Student();
                 student.setId(rs.getInt("id"));
-                student.setFirstName(rs.getString("firstName"));
-                student.setLastName(rs.getString("lastName"));
-                student.setTelephoneNumb(rs.getString("telephoneNumb"));
+                student.setFirstName(rs.getString("first_name"));
+                student.setLastName(rs.getString("last_name"));
+                student.setTelephoneNumb(rs.getString("telephone_number"));
                 Teacher teacher = new Teacher();
                 teacher.setId(rs.getInt("id"));
-                teacher.setFirstName(rs.getString("firstName"));
-                teacher.setLastName(rs.getString("lastName"));
+                teacher.setFirstName(rs.getString("first_name"));
+                teacher.setLastName(rs.getString("last_name"));
                 Course course = new Course();
                 course.setId(rs.getInt("id"));
-                course.setCourseName(rs.getString("courseName"));
+                course.setCourseName(rs.getString("course_name"));
                 course.setDuration(rs.getInt("duration"));
                 teacher.setCourse(course);
                 student.setTeacher(teacher);
@@ -55,6 +55,8 @@ public class StudentDaoImpl implements StudentDao {
             }
         } catch (Exception e) {
             e.printStackTrace();
+        }finally{
+            DBUtil.close(con,ps,rs);
         }
         return list;
 

@@ -15,7 +15,7 @@ public class Config {
     static{
         try{
             properties=new Properties();
-            properties.load(new FileInputStream("app.properies"));
+            properties.load(new FileInputStream("app.properties"));
             
         }catch(IOException e){
             e.printStackTrace();

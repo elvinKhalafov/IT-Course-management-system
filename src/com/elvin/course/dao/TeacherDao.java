@@ -5,8 +5,6 @@
  */
 package com.elvin.course.dao;
 
-import com.elvin.course.model.Course;
-import com.elvin.course.model.Student;
 import com.elvin.course.model.Teacher;
 import java.util.List;
 
@@ -14,9 +12,6 @@ import java.util.List;
  *
  * @author Khal_vh04
  */
-public interface StudentDao {
-    List<Student> getAllStudent();
-    boolean registerNewStudent(Student student,Teacher teacher,Course course);
-    
-    
+public interface TeacherDao {
+     List<Teacher> getTeacherByCourseId(int id);
 }

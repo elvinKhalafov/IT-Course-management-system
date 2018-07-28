@@ -10,7 +10,7 @@ public class DBUtil {
         Connection connection = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/swing";
+            String url = "jdbc:mysql://localhost:3306/ıt_course_management_system";
             String username=Config.getUsername();
             String password=Config.getPassword();
             connection = DriverManager.getConnection(url, username, password);
@@ -38,7 +38,8 @@ public class DBUtil {
         }
 
     }
-    
+     
+   
     
     
 }
