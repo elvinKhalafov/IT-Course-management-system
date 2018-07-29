@@ -16,7 +16,8 @@ import java.util.List;
  */
 public interface StudentDao {
     List<Student> getAllStudent();
-    boolean registerNewStudent(Student student,Teacher teacher,Course course);
+    boolean registerNewStudent(Student student,Teacher teacher);
+     public boolean deleteStudent(int id);
     
     
 }

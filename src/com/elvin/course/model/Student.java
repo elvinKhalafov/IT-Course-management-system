@@ -15,13 +15,21 @@ public class Student {
         
     }
 
-    public Student(int id, String firstName, String lastName, Teacher idTeacher, String telephoneNumb) {
+    public Student(int id, String firstName, String lastName, Teacher teacher, String telephoneNumb) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.teacher = idTeacher;
+        this.teacher = teacher;
         this.telephoneNumb = telephoneNumb;
     }
+
+    public Student(String firstName, String lastName, Teacher teacher, String telephoneNumb) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.teacher = teacher;
+        this.telephoneNumb = telephoneNumb;
+    }
+    
 
     public int getId() {
         return id;

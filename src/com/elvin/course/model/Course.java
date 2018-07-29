@@ -19,6 +19,12 @@ public class Course {
         this.duration = duration;
     }
 
+    public Course(String courseName, int duration) {
+        this.courseName = courseName;
+        this.duration = duration;
+    }
+    
+
     public int getId() {
         return id;
     }

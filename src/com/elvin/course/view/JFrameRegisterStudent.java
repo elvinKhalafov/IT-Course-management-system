@@ -5,15 +5,21 @@
  */
 package com.elvin.course.view;
 
+import com.elvin.course.DBUtil.Constants;
 import com.elvin.course.dao.CourseDao;
 import com.elvin.course.dao.CourseDaoImpl;
+import com.elvin.course.dao.StudentDao;
+import com.elvin.course.dao.StudentDaoImpl;
+
 import com.elvin.course.dao.TeacherDao;
 import com.elvin.course.dao.TeacherDaoImpl;
 import com.elvin.course.model.Course;
+import com.elvin.course.model.Student;
 import com.elvin.course.model.Teacher;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -22,8 +28,11 @@ import java.util.Map;
 public class JFrameRegisterStudent extends javax.swing.JFrame {
 
     private CourseDao courseDao = new CourseDaoImpl();
-    private Map<String, Integer> map = new HashMap<>();
-    private TeacherDao teacherDao=new TeacherDaoImpl();
+    private Map<String, Course> mapCourse = new HashMap<>();
+    private Map<String,Integer> mapTeacher=new HashMap<>();
+    private TeacherDao teacherDao = new TeacherDaoImpl();
+    private StudentDao studentDao=new StudentDaoImpl();
+    
 
     /**
      * Creates new form JFrameRegisterAdmin
@@ -31,6 +40,7 @@ public class JFrameRegisterStudent extends javax.swing.JFrame {
     public JFrameRegisterStudent() {
         initComponents();
         customInit();
+
     }
 
     /**
@@ -55,7 +65,7 @@ public class JFrameRegisterStudent extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jComboBoxCourse = new javax.swing.JComboBox<>();
         jLabel6 = new javax.swing.JLabel();
-        jSlider1 = new javax.swing.JSlider();
+        jTextFieldDuration = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jButtonRegister = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
@@ -90,7 +100,11 @@ public class JFrameRegisterStudent extends javax.swing.JFrame {
 
         jLabel4.setText("Phone Number");
 
-        jFormattedTextFieldStudentPhoneNumb.setText("jFormattedTextField1");
+        try {
+            jFormattedTextFieldStudentPhoneNumb.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("(###) ###-##-##")));
+        } catch (java.text.ParseException ex) {
+            ex.printStackTrace();
+        }
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -136,13 +150,7 @@ public class JFrameRegisterStudent extends javax.swing.JFrame {
 
         jLabel6.setText("Duration");
 
-        jSlider1.setMajorTickSpacing(6);
-        jSlider1.setMaximum(30);
-        jSlider1.setMinimum(3);
-        jSlider1.setMinorTickSpacing(3);
-        jSlider1.setPaintLabels(true);
-        jSlider1.setPaintTicks(true);
-        jSlider1.setSnapToTicks(true);
+        jTextFieldDuration.setEditable(false);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -153,8 +161,8 @@ public class JFrameRegisterStudent extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jComboBoxCourse, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSlider1, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE)
+                    .addComponent(jTextFieldDuration))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
@@ -166,13 +174,18 @@ public class JFrameRegisterStudent extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSlider1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTextFieldDuration, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jButtonRegister.setText("Register");
+        jButtonRegister.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRegisterActionPerformed(evt);
+            }
+        });
 
         jButtonCancel.setText("Cancel");
 
@@ -255,32 +268,57 @@ public class JFrameRegisterStudent extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBoxCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxCourseActionPerformed
-         
-            String courseName = jComboBoxCourse.getSelectedItem().toString();
-            Integer id = map.get(courseName);
-            System.out.println(id);
-            if (id == null) {
-//                id = map.get(jComboBoxCourse.getItemAt(1));
-return;
-            }
-            List<Teacher> listTeacher=teacherDao.getTeacherByCourseId(id);
-            jComboBox2.removeAllItems();
-            for(Teacher t:listTeacher){
-            jComboBox2.addItem(t.getFirstName());
-            };
-            
-            
-            
-            
-            
-            
-            
         
+        String courseName = jComboBoxCourse.getSelectedItem().toString();
+        Course course = mapCourse.get(courseName);
+        
+        
+        
+        if (course == null) {
+//                id = map.get(jComboBoxCourse.getItemAt(1));
 
-       
+            return;
+        }
+        jTextFieldDuration.setText(course.getDuration()+"");
+        List<Teacher> listTeacher = teacherDao.getTeacherByCourseId(course.getId());
+        jComboBox2.removeAllItems();
+        mapTeacher=new HashMap<>();
+        for (Teacher t : listTeacher) {
+            String name="";
+            name=t.getFirstName()+" "+t.getLastName();
+            jComboBox2.addItem(name);
+            mapTeacher.put(name,t.getId());
+        };
 
 
     }//GEN-LAST:event_jComboBoxCourseActionPerformed
+
+    private void jButtonRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegisterActionPerformed
+        String studentFirstName=jTextFieldStudentFirstName.getText();
+        String studentLastname=jTextFieldStudentLastName.getText();
+        String studentPhoneNumb=jFormattedTextFieldStudentPhoneNumb.getText();
+        String courseName=(String) jComboBoxCourse.getSelectedItem();
+        int duration=Integer.parseInt(jTextFieldDuration.getText());
+        String teacherFullName = (String) jComboBox2.getSelectedItem();
+        String[] parts = teacherFullName.split(" ");
+        String teacherFirstName=parts[0];
+        String teacherlastName=parts[1];
+        
+        Teacher teacher=new Teacher();
+        teacher.setId(mapTeacher.get(jComboBox2.getSelectedItem()));
+        Student student=new Student(studentFirstName,studentLastname, teacher,studentPhoneNumb);
+        boolean result = studentDao.registerNewStudent(student, teacher);
+        if(result){
+            JOptionPane.showMessageDialog(null,Constants.REGISTER_MASSAGE );
+        }else JOptionPane.showMessageDialog(this,Constants.ERROR_REGISETR_MASSAGE );
+        
+      
+      
+        
+        
+        
+        
+    }//GEN-LAST:event_jButtonRegisterActionPerformed
 
     /**
      * @param args the command line arguments
@@ -335,7 +373,7 @@ return;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JSlider jSlider1;
+    private javax.swing.JTextField jTextFieldDuration;
     private javax.swing.JTextField jTextFieldStudentFirstName;
     private javax.swing.JTextField jTextFieldStudentLastName;
     // End of variables declaration//GEN-END:variables
@@ -344,9 +382,11 @@ return;
         List<Course> list = courseDao.getAllCourse();
         for (Course c : list) {
             jComboBoxCourse.addItem(c.getCourseName());
-            map.put(c.getCourseName(), c.getId());
+            mapCourse.put(c.getCourseName(), c);
 
         }
+        
+        jComboBoxCourse.setSelectedIndex(0);
 
     }
 }

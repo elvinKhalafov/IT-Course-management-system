@@ -63,51 +63,27 @@ public class StudentDaoImpl implements StudentDao {
     }
 
     @Override
-    public boolean registerNewStudent(Student student, Teacher teacher, Course course) {
+    public boolean registerNewStudent(Student student, Teacher teacher) {
         Connection con = null;
         PreparedStatement psStudent = null;
-        PreparedStatement psTeacher = null;
-        PreparedStatement psCourse = null;
+       
 
         ResultSet rsCourse = null;
         ResultSet rsTeacher=null;
-        int newCourseId;
-        int newTeacherId;
+        
         boolean result = false;
         String sqlStudent = "insert into student(first_name,last_name,telephone_number,id_teacher)values(?,?,?,?)";
-        String sqlTeacher = "insert into teachers(first_name,last_name,id_course)values)(?,?)";
-        String sqlCourse = "insert into course(course_name,duration)values(?,?)";
+       
 
         try {
-            con = DBUtil.getConnection();
-            psCourse = con.prepareStatement(sqlCourse, PreparedStatement.RETURN_GENERATED_KEYS);
-            psCourse.setString(1, course.getCourseName());
-            psCourse.setInt(2, course.getDuration());
-            rsCourse = psCourse.getGeneratedKeys();
-            psCourse.execute();
-            if (rsCourse.next()) {
-                newCourseId = rsCourse.getInt(1);
-            } else {
-                throw new Exception();
-            }
-            psTeacher = con.prepareStatement(sqlTeacher, PreparedStatement.RETURN_GENERATED_KEYS);
-            psTeacher.setString(1, teacher.getFirstName());
-            psTeacher.setString(2, teacher.getLastName());
-            psTeacher.setInt(3, newCourseId);
-            rsTeacher = psTeacher.getGeneratedKeys();
-            psTeacher.execute();
-            if (rsTeacher.next()) {
-                newTeacherId = rsTeacher.getInt(1);
-            } else {
-                throw new Exception();
-            }
-            
-            psStudent=con.prepareStatement(sqlStudent, PreparedStatement.RETURN_GENERATED_KEYS);
+            con=DBUtil.getConnection();
+            psStudent=con.prepareStatement(sqlStudent);
             psStudent.setString(1, student.getFirstName());
             psStudent.setString(2, student.getLastName());
             psStudent.setString(3,student.getTelephoneNumb());
-            
-            psStudent.setInt(4,newTeacherId );
+            psStudent.setInt(4,teacher.getId());
+            psStudent.execute();
+           result=true;
             
         } catch (Exception e) {
             e.printStackTrace();
@@ -116,5 +92,29 @@ public class StudentDaoImpl implements StudentDao {
         }
         return result;
     }
+
+    @Override
+    public boolean deleteStudent(int id) {
+       Connection con = null;
+        PreparedStatement ps=null;
+        ResultSet rs=null;
+        String sql="delete from student where id = ?";
+        boolean result=false;
+        try{
+            con = DBUtil.getConnection();
+            ps=con.prepareStatement(sql);
+            ps.setInt(1,id);
+            ps.execute();
+            result=true;
+            
+        }catch(Exception e){
+             e.printStackTrace();
+            
+        }finally{
+            DBUtil.close(con,ps,rs);
+        }
+        return result;
+    }
+    
 
 }
