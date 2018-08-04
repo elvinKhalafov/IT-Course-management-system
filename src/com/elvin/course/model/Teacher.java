@@ -14,7 +14,7 @@ public class Teacher {
         
     }
 
-    public Teacher(int id, Course id_course, String firstName, String lastName) {
+    public Teacher(int id, String firstName, String lastName, Course id_course) {
         this.id = id;
         this.course = id_course;
         this.firstName = firstName;

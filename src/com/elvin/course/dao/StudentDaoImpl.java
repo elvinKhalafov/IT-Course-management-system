@@ -28,7 +28,7 @@ public class StudentDaoImpl implements StudentDao {
         ResultSet rs = null;
         List<Student> list = new ArrayList<>();
         String sql = "select s.first_name as student_first_name, s.last_name as student_last_name, s.telephone_number, t.first_name as teacher_first_name, t.last_name as teacher_last_name, c.course_name, c.duration from student s inner join teachers t on s.id_teacher=t.id \n"
-                + "inner join course c on t.id_course=c.id;";
+                + "inner join course c on t.id_course=c.id";
         try {
             con = DBUtil.getConnection();
             ps = con.prepareStatement(sql);
@@ -115,6 +115,40 @@ public class StudentDaoImpl implements StudentDao {
         }
         return result;
     }
+
+    @Override
+    public boolean updateStudent(Student student) {
+        
+        boolean result=false;
+        Connection con = null;
+        PreparedStatement ps=null;
+        String sql="update student set first_name=?,  last_name=?,id_teacher=?,telephone_number=? where id=?";
+         try{
+            con = DBUtil.getConnection();
+            ps=con.prepareStatement(sql);
+            ps.setString(1, student.getFirstName());
+            ps.setString(2,student.getLastName());
+            ps.setInt(3, student.getTeacher().getId());
+            ps.setString(4,student.getTelephoneNumb());
+            ps.setInt(5,student.getId());
+            
+            ps.executeUpdate();
+            result=true;
+            
+        }catch(Exception e){
+             e.printStackTrace();
+            
+        }finally{
+            DBUtil.close(con,ps,null);
+        }
+        
+        
+        
+        return result;
+    }
+
+   
+    
     
 
 }
