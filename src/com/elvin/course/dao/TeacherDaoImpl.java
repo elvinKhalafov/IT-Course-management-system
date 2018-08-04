@@ -55,7 +55,7 @@ public class TeacherDaoImpl implements TeacherDao {
         PreparedStatement ps = null;
         ResultSet rs = null;
         List<Teacher> list = new ArrayList<>();
-        String sql = "select t.first_name as teacher_first_name, t.last_name as teacher_last_name, c.course_name, c.duration\n"
+        String sql = "select t.id as teacher_id, t.first_name as teacher_first_name, t.last_name as teacher_last_name, c.course_name, c.duration, c.id as course_id\n"
                 + "from teachers t inner join course c on t.id_course=c.id";
         try {
             con = DBUtil.getConnection();
@@ -65,11 +65,11 @@ public class TeacherDaoImpl implements TeacherDao {
             while (rs.next()) {
                 
                 Teacher teacher = new Teacher();
-                teacher.setId(rs.getInt("id"));
-                teacher.setFirstName(rs.getString("first_name"));
-                teacher.setLastName(rs.getString("last_name"));
+                teacher.setId(rs.getInt("teacher_id"));
+                teacher.setFirstName(rs.getString("teacher_first_name"));
+                teacher.setLastName(rs.getString("teacher_last_name"));
                 Course course = new Course();
-                course.setId(rs.getInt("id"));
+                course.setId(rs.getInt("course_id"));
                 course.setCourseName(rs.getString("course_name"));
                 course.setDuration(rs.getInt("duration"));
                 teacher.setCourse(course);

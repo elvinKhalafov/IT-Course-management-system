@@ -27,7 +27,7 @@ public class StudentDaoImpl implements StudentDao {
         PreparedStatement ps = null;
         ResultSet rs = null;
         List<Student> list = new ArrayList<>();
-        String sql = "select s.first_name as student_first_name, s.last_name as student_last_name, s.telephone_number, t.first_name as teacher_first_name, t.last_name as teacher_last_name, c.course_name, c.duration from student s inner join teachers t on s.id_teacher=t.id \n"
+        String sql = "select s.id as student_id, s.first_name as student_first_name, s.last_name as student_last_name, s.telephone_number, t.id as teacher_id, t.first_name as teacher_first_name, t.last_name as teacher_last_name,c.id as course_id, c.course_name, c.duration from student s inner join teachers t on s.id_teacher=t.id \n"
                 + "inner join course c on t.id_course=c.id";
         try {
             con = DBUtil.getConnection();
@@ -36,16 +36,16 @@ public class StudentDaoImpl implements StudentDao {
 
             while (rs.next()) {
                 Student student = new Student();
-                student.setId(rs.getInt("id"));
-                student.setFirstName(rs.getString("first_name"));
-                student.setLastName(rs.getString("last_name"));
+                student.setId(rs.getInt("student_id"));
+                student.setFirstName(rs.getString("student_first_name"));
+                student.setLastName(rs.getString("student_last_name"));
                 student.setTelephoneNumb(rs.getString("telephone_number"));
                 Teacher teacher = new Teacher();
-                teacher.setId(rs.getInt("id"));
-                teacher.setFirstName(rs.getString("first_name"));
-                teacher.setLastName(rs.getString("last_name"));
+                teacher.setId(rs.getInt("teacher_id"));
+                teacher.setFirstName(rs.getString("teacher_first_name"));
+                teacher.setLastName(rs.getString("teacher_last_name"));
                 Course course = new Course();
-                course.setId(rs.getInt("id"));
+                course.setId(rs.getInt("course_id"));
                 course.setCourseName(rs.getString("course_name"));
                 course.setDuration(rs.getInt("duration"));
                 teacher.setCourse(course);

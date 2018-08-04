@@ -25,7 +25,7 @@ import javax.swing.JOptionPane;
  *
  * @author samir
  */
-public class JFrameRegisterStudent extends javax.swing.JFrame {
+public class JFrameUpdateStudent extends javax.swing.JFrame {
 
     private CourseDao courseDao = new CourseDaoImpl();
     private Map<String, Course> mapCourse = new HashMap<>();
@@ -37,13 +37,20 @@ public class JFrameRegisterStudent extends javax.swing.JFrame {
     /**
      * Creates new form JFrameRegisterAdmin
      */
-    public JFrameRegisterStudent() {
+    public JFrameUpdateStudent() {
         initComponents();
         customInit();
 
     }
     
-
+    public JFrameUpdateStudent(Student student){
+        this();
+        jTextFieldStudentFirstName.setText(student.getFirstName());
+        jTextFieldStudentLastName.setText(student.getLastName());
+         jFormattedTextFieldStudentPhoneNumb.setText(student.getTelephoneNumb());
+         
+         
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -339,21 +346,23 @@ public class JFrameRegisterStudent extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(JFrameRegisterStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JFrameUpdateStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(JFrameRegisterStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JFrameUpdateStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(JFrameRegisterStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JFrameUpdateStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(JFrameRegisterStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(JFrameUpdateStudent.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new JFrameRegisterStudent().setVisible(true);
+                new JFrameUpdateStudent().setVisible(true);
             }
         });
     }
