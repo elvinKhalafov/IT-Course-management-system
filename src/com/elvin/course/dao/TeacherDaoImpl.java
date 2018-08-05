@@ -107,6 +107,11 @@ public class TeacherDaoImpl implements TeacherDao {
         }
         return result;
     }
+
+    @Override
+    public Teacher getTeacherById() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
 

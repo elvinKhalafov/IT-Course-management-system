@@ -32,22 +32,22 @@ public class JFrameUpdateStudent extends javax.swing.JFrame {
     private Map<String,Integer> mapTeacher=new HashMap<>();
     private TeacherDao teacherDao = new TeacherDaoImpl();
     private StudentDao studentDao=new StudentDaoImpl();
-    
+    private Student student=new Student();
 
     /**
      * Creates new form JFrameRegisterAdmin
      */
     public JFrameUpdateStudent() {
         initComponents();
-        customInit();
+      
 
     }
     
     public JFrameUpdateStudent(Student student){
         this();
-        jTextFieldStudentFirstName.setText(student.getFirstName());
-        jTextFieldStudentLastName.setText(student.getLastName());
-         jFormattedTextFieldStudentPhoneNumb.setText(student.getTelephoneNumb());
+        this.student=student;
+        customInit();
+         
          
          
     }
@@ -76,7 +76,7 @@ public class JFrameUpdateStudent extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jTextFieldDuration = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
-        jButtonRegister = new javax.swing.JButton();
+        jButtonUpdate = new javax.swing.JButton();
         jButtonCancel = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         jComboBox2 = new javax.swing.JComboBox<>();
@@ -189,10 +189,10 @@ public class JFrameUpdateStudent extends javax.swing.JFrame {
 
         jPanel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jButtonRegister.setText("Register");
-        jButtonRegister.addActionListener(new java.awt.event.ActionListener() {
+        jButtonUpdate.setText("Update");
+        jButtonUpdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonRegisterActionPerformed(evt);
+                jButtonUpdateActionPerformed(evt);
             }
         });
 
@@ -205,7 +205,7 @@ public class JFrameUpdateStudent extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButtonRegister, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jButtonCancel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -213,7 +213,7 @@ public class JFrameUpdateStudent extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButtonRegister)
+                .addComponent(jButtonUpdate)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonCancel)
                 .addContainerGap(46, Short.MAX_VALUE))
@@ -302,7 +302,7 @@ public class JFrameUpdateStudent extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jComboBoxCourseActionPerformed
 
-    private void jButtonRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegisterActionPerformed
+    private void jButtonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateActionPerformed
         String studentFirstName=jTextFieldStudentFirstName.getText();
         String studentLastname=jTextFieldStudentLastName.getText();
         String studentPhoneNumb=jFormattedTextFieldStudentPhoneNumb.getText();
@@ -315,10 +315,11 @@ public class JFrameUpdateStudent extends javax.swing.JFrame {
         
         Teacher teacher=new Teacher();
         teacher.setId(mapTeacher.get(jComboBox2.getSelectedItem()));
-        Student student=new Student(studentFirstName,studentLastname, teacher,studentPhoneNumb);
-        boolean result = studentDao.registerNewStudent(student, teacher);
+        Student student=new Student(this.student.getId(),studentFirstName,studentLastname, teacher,studentPhoneNumb);
+        boolean result = studentDao.updateStudent(student);
         if(result){
             JOptionPane.showMessageDialog(null,Constants.REGISTER_MASSAGE );
+            setVisible(false);
         }else JOptionPane.showMessageDialog(this,Constants.ERROR_REGISETR_MASSAGE );
         
       
@@ -327,7 +328,7 @@ public class JFrameUpdateStudent extends javax.swing.JFrame {
         
         
         
-    }//GEN-LAST:event_jButtonRegisterActionPerformed
+    }//GEN-LAST:event_jButtonUpdateActionPerformed
 
     /**
      * @param args the command line arguments
@@ -369,7 +370,7 @@ public class JFrameUpdateStudent extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCancel;
-    private javax.swing.JButton jButtonRegister;
+    private javax.swing.JButton jButtonUpdate;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JComboBox<String> jComboBoxCourse;
     private javax.swing.JFormattedTextField jFormattedTextFieldStudentPhoneNumb;
@@ -390,6 +391,11 @@ public class JFrameUpdateStudent extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void customInit() {
+        jTextFieldStudentFirstName.setText(student.getFirstName());
+        jTextFieldStudentLastName.setText(student.getLastName());
+        jFormattedTextFieldStudentPhoneNumb.setText(student.getTelephoneNumb());
+        
+         jFormattedTextFieldStudentPhoneNumb.setText(student.getTelephoneNumb());
         List<Course> list = courseDao.getAllCourse();
         for (Course c : list) {
             jComboBoxCourse.addItem(c.getCourseName());
@@ -397,7 +403,10 @@ public class JFrameUpdateStudent extends javax.swing.JFrame {
 
         }
         
-        jComboBoxCourse.setSelectedIndex(0);
+        jComboBoxCourse.setSelectedItem(student.getTeacher().getCourse().getCourseName());
+        jTextFieldDuration.setText(String.valueOf(student.getTeacher().getCourse().getDuration()));
+        String fullName=student.getTeacher().getFirstName()+" "+ student.getTeacher().getLastName();
+        jComboBox2.setSelectedItem(fullName);
 
     }
 }

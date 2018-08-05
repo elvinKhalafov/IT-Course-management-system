@@ -16,4 +16,6 @@ public interface TeacherDao {
      List<Teacher> getTeacherByCourseId(int id);
      List<Teacher> getAllTeacher();
      boolean deleteTeacher(int id);
+     public Teacher getTeacherById();
+     
 }

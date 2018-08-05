@@ -147,6 +147,45 @@ public class StudentDaoImpl implements StudentDao {
         return result;
     }
 
+    @Override
+    public Student getStudentById(int id) {
+      Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Student student=new Student();
+      String sql = "select s.id as student_id, s.first_name as student_first_name, s.last_name as student_last_name, s.telephone_number, t.id as teacher_id, t.first_name as teacher_first_name, t.last_name as teacher_last_name,c.id as course_id, c.course_name, c.duration from student s inner join teachers t on s.id_teacher=t.id \n"
+                + "inner join course c on t.id_course=c.id where s.id=?";
+        try{
+            con = DBUtil.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+             while (rs.next()){
+                 
+                student.setId(rs.getInt("student_id"));
+                student.setFirstName(rs.getString("student_first_name"));
+                student.setLastName(rs.getString("student_last_name"));
+                student.setTelephoneNumb(rs.getString("telephone_number"));
+                Teacher teacher = new Teacher();
+                teacher.setId(rs.getInt("teacher_id"));
+                teacher.setFirstName(rs.getString("teacher_first_name"));
+                teacher.setLastName(rs.getString("teacher_last_name"));
+                Course course = new Course();
+                course.setId(rs.getInt("course_id"));
+                course.setCourseName(rs.getString("course_name"));
+                course.setDuration(rs.getInt("duration"));
+                teacher.setCourse(course);
+                student.setTeacher(teacher);
+             }
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }finally{
+             DBUtil.close(con,ps,null);
+        }
+        return student;
+    }
+
    
     
     
