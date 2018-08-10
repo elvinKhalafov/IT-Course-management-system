@@ -1,5 +1,6 @@
 package com.elvin.course.view;
 
+import com.elvin.course.DBUtil.Constants;
 import com.elvin.course.dao.CourseDao;
 import com.elvin.course.dao.CourseDaoImpl;
 import com.elvin.course.dao.StudentDao;
@@ -10,8 +11,11 @@ import com.elvin.course.model.Course;
 import com.elvin.course.model.Student;
 import com.elvin.course.model.Teacher;
 import java.awt.Color;
-import java.util.ArrayList;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import javax.swing.JOptionPane;
 import javax.swing.RowFilter;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -27,13 +31,14 @@ public class JFrameAdmin extends javax.swing.JFrame {
     StudentDao studentDao = new StudentDaoImpl();
     TeacherDao teacherDao = new TeacherDaoImpl();
     CourseDao courseDao = new CourseDaoImpl();
+    private Map<String, Integer> mapCourse = new HashMap<>();
 
     public JFrameAdmin() {
         initComponents();
         customInit();
         setStudentTable();
         setTeacherTable();
-        //setCourseTable();
+        setCourseTable();
     }
 
     /**
@@ -65,15 +70,30 @@ public class JFrameAdmin extends javax.swing.JFrame {
         jTextFieldSearchTeacher = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        jTextFieldTeacherFirstName = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        jTextFieldTeacherLastName = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jComboBoxCourse1 = new javax.swing.JComboBox<>();
         jButtonRegisterTeacher = new javax.swing.JButton();
-        jButtonUpdate = new javax.swing.JButton();
-        jButtonReset = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
+        jButtonUpdateTeacher = new javax.swing.JButton();
+        jButtonResetTeacher = new javax.swing.JButton();
+        jPanelCourse = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTableCourse = new javax.swing.JTable();
+        jPanel8 = new javax.swing.JPanel();
+        jButtonEditCourse = new javax.swing.JButton();
+        jButtonDeleteCourse = new javax.swing.JButton();
+        jTextFieldSearchCourse = new javax.swing.JTextField();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jTextFieldCourseName = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        jTextFieldDuration = new javax.swing.JTextField();
+        jButtonRegisterCourse = new javax.swing.JButton();
+        jButtonUpdateCourse = new javax.swing.JButton();
+        jButtonResetCourse = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowFocusListener(new java.awt.event.WindowFocusListener() {
@@ -128,6 +148,11 @@ public class JFrameAdmin extends javax.swing.JFrame {
         );
 
         jButtonAddStudent.setText("Add");
+        jButtonAddStudent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAddStudentActionPerformed(evt);
+            }
+        });
 
         jButtonEditStudent.setText("Edit");
         jButtonEditStudent.setEnabled(false);
@@ -306,13 +331,22 @@ public class JFrameAdmin extends javax.swing.JFrame {
         jLabel3.setText("Course");
 
         jButtonRegisterTeacher.setText("Register ");
-        jButtonRegisterTeacher.setEnabled(false);
+        jButtonRegisterTeacher.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRegisterTeacherActionPerformed(evt);
+            }
+        });
 
-        jButtonUpdate.setText("Update");
-        jButtonUpdate.setEnabled(false);
+        jButtonUpdateTeacher.setText("Update");
+        jButtonUpdateTeacher.setEnabled(false);
+        jButtonUpdateTeacher.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonUpdateTeacherActionPerformed(evt);
+            }
+        });
 
-        jButtonReset.setText("Reset");
-        jButtonReset.setEnabled(false);
+        jButtonResetTeacher.setText("Reset");
+        jButtonResetTeacher.setEnabled(false);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -321,11 +355,11 @@ public class JFrameAdmin extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldTeacherFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField2)
+                    .addComponent(jTextFieldTeacherLastName)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -336,9 +370,9 @@ public class JFrameAdmin extends javax.swing.JFrame {
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addComponent(jComboBoxCourse1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButtonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonResetTeacher, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButtonUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButtonUpdateTeacher, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -352,11 +386,11 @@ public class JFrameAdmin extends javax.swing.JFrame {
                     .addComponent(jButtonRegisterTeacher, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldTeacherFirstName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldTeacherLastName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBoxCourse1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonUpdate)
-                    .addComponent(jButtonReset))
+                    .addComponent(jButtonUpdateTeacher)
+                    .addComponent(jButtonResetTeacher))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
 
@@ -383,18 +417,196 @@ public class JFrameAdmin extends javax.swing.JFrame {
 
         jTabbedAdmin.addTab("Teacher", jPanelTeacher);
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 643, Short.MAX_VALUE)
+        jTableCourse.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane4.setViewportView(jTableCourse);
+
+        jPanel8.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jButtonEditCourse.setText("Edit Course");
+        jButtonEditCourse.setEnabled(false);
+        jButtonEditCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEditCourseActionPerformed(evt);
+            }
+        });
+
+        jButtonDeleteCourse.setText("Delete Course");
+        jButtonDeleteCourse.setEnabled(false);
+        jButtonDeleteCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonDeleteCourseActionPerformed(evt);
+            }
+        });
+
+        jTextFieldSearchCourse.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTextFieldSearchCourseFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTextFieldSearchCourseFocusLost(evt);
+            }
+        });
+        jTextFieldSearchCourse.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jTextFieldSearchCourseMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jTextFieldSearchCourseMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTextFieldSearchCourseMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jTextFieldSearchCourseMouseReleased(evt);
+            }
+        });
+        jTextFieldSearchCourse.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTextFieldSearchCourseKeyReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButtonEditCourse, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
+                    .addComponent(jButtonDeleteCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 100, Short.MAX_VALUE)
+                    .addComponent(jTextFieldSearchCourse, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
+                .addContainerGap())
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 453, Short.MAX_VALUE)
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addComponent(jTextFieldSearchCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonEditCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonDeleteCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(150, Short.MAX_VALUE))
         );
 
-        jTabbedAdmin.addTab("Course", jPanel3);
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4)
+                .addGap(18, 18, 18)
+                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+
+        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Add Teacher"));
+
+        jLabel4.setText("Course Name");
+
+        jLabel5.setText("Course Duration");
+
+        jButtonRegisterCourse.setText("Register ");
+        jButtonRegisterCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRegisterCourseActionPerformed(evt);
+            }
+        });
+
+        jButtonUpdateCourse.setText("Update");
+        jButtonUpdateCourse.setEnabled(false);
+        jButtonUpdateCourse.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonUpdateCourseActionPerformed(evt);
+            }
+        });
+
+        jButtonResetCourse.setText("Reset");
+        jButtonResetCourse.setEnabled(false);
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTextFieldCourseName, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jTextFieldDuration)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(254, 254, 254)
+                        .addComponent(jButtonRegisterCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(136, 136, 136)
+                        .addComponent(jButtonResetCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonUpdateCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonRegisterCourse, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextFieldCourseName, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextFieldDuration, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonUpdateCourse)
+                    .addComponent(jButtonResetCourse))
+                .addContainerGap(21, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanelCourseLayout = new javax.swing.GroupLayout(jPanelCourse);
+        jPanelCourse.setLayout(jPanelCourseLayout);
+        jPanelCourseLayout.setHorizontalGroup(
+            jPanelCourseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelCourseLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelCourseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanelCourseLayout.setVerticalGroup(
+            jPanelCourseLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelCourseLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jTabbedAdmin.addTab("Course", jPanelCourse);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -418,8 +630,16 @@ public class JFrameAdmin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonEditTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditTeacherActionPerformed
-
-
+        
+        
+        jButtonEditTeacher.setEnabled(true);
+         Integer id = (Integer) jTableTeacher.getValueAt(jTableTeacher.getSelectedRow(), 0);
+        Teacher teacher = teacherDao.getTeacherById(id);
+        jTextFieldTeacherFirstName.setText(teacher.getFirstName());
+        jTextFieldTeacherLastName.setText(teacher.getLastName());
+        //jComboBoxCourse1 set elemeyi mellimden sorush
+        
+        
     }//GEN-LAST:event_jButtonEditTeacherActionPerformed
 
     private void jButtonDeleteStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteStudentActionPerformed
@@ -440,6 +660,8 @@ public class JFrameAdmin extends javax.swing.JFrame {
     private void formWindowGainedFocus(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowGainedFocus
         setStudentTable();
         setTeacherTable();
+        setCourseTable();
+        //(bunu mellimden sorush)
 
     }//GEN-LAST:event_formWindowGainedFocus
 
@@ -520,6 +742,145 @@ public class JFrameAdmin extends javax.swing.JFrame {
             setTeacherTable();
         }
     }//GEN-LAST:event_jButtonDeleteTeacherActionPerformed
+
+    private void jButtonEditCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditCourseActionPerformed
+      
+        jButtonUpdateCourse.setEnabled(true);
+         Integer id = (Integer) jTableCourse.getValueAt(jTableCourse.getSelectedRow(), 0);
+         Course course=courseDao.getCourseById(id);
+        jTextFieldCourseName.setText(course.getCourseName());
+        jTextFieldDuration.setText(course.getDuration()+"");
+    }//GEN-LAST:event_jButtonEditCourseActionPerformed
+
+    private void jButtonDeleteCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteCourseActionPerformed
+        Integer id = (Integer) jTableCourse.getValueAt(jTableCourse.getSelectedRow(), 0);
+        if (id != null) {
+            courseDao.deleteCourse(id);
+            setCourseTable();
+        }
+    }//GEN-LAST:event_jButtonDeleteCourseActionPerformed
+
+    private void jTextFieldSearchCourseFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldSearchCourseFocusGained
+          if (jTextFieldSearchCourse.getText().equals("Search...")) {
+            jTextFieldSearchCourse.setText("");
+            jTextFieldSearchCourse.setForeground(Color.GRAY);
+        }
+    }//GEN-LAST:event_jTextFieldSearchCourseFocusGained
+
+    private void jTextFieldSearchCourseFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextFieldSearchCourseFocusLost
+         if (jTextFieldSearchCourse.getText().equals("")) {
+            jTextFieldSearchCourse.setText("Search...");
+            jTextFieldSearchCourse.setForeground(Color.GRAY);
+        }
+    }//GEN-LAST:event_jTextFieldSearchCourseFocusLost
+
+    private void jTextFieldSearchCourseMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldSearchCourseMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldSearchCourseMouseEntered
+
+    private void jTextFieldSearchCourseMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldSearchCourseMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldSearchCourseMouseExited
+
+    private void jTextFieldSearchCourseMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldSearchCourseMousePressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldSearchCourseMousePressed
+
+    private void jTextFieldSearchCourseMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextFieldSearchCourseMouseReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldSearchCourseMouseReleased
+
+    private void jTextFieldSearchCourseKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextFieldSearchCourseKeyReleased
+        DefaultTableModel dtm = (DefaultTableModel) jTableCourse.getModel();
+        String text = jTextFieldSearchCourse.getText();
+        TableRowSorter<DefaultTableModel> trs = new TableRowSorter<>(dtm);
+        jTableCourse.setRowSorter(trs);
+        trs.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+
+    }//GEN-LAST:event_jTextFieldSearchCourseKeyReleased
+
+    private void jButtonRegisterTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegisterTeacherActionPerformed
+        
+        String firstName=jTextFieldTeacherFirstName.getText();
+        String lastName=jTextFieldTeacherLastName.getText();
+        String courseName=(String) jComboBoxCourse1.getSelectedItem();
+        
+        Course course=new Course();
+        course.setId(mapCourse.get(courseName));//mellimden sorush seti niye edirik
+        Teacher teacher=new Teacher(course,firstName,lastName);
+        boolean result =teacherDao.registerNewTeacher(teacher, course);
+         if(result){
+            JOptionPane.showMessageDialog(null,Constants.REGISTER_MASSAGE );
+        }else JOptionPane.showMessageDialog(this,Constants.ERROR_REGISETR_MASSAGE );
+        
+        
+        
+        
+    }//GEN-LAST:event_jButtonRegisterTeacherActionPerformed
+
+    private void jButtonAddStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddStudentActionPerformed
+        new JFrameRegisterStudent().setVisible(true);
+       
+    }//GEN-LAST:event_jButtonAddStudentActionPerformed
+
+    private void jButtonUpdateTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateTeacherActionPerformed
+         String teacherFirstName=jTextFieldTeacherFirstName.getText();
+         String teacherLastName=jTextFieldTeacherLastName.getText();
+         String courseName=(String)jComboBoxCourse1.getSelectedItem();
+         Course course=new Course();
+         //??? mellimden sorush
+        Teacher teacher=new Teacher();
+        teacher.setFirstName(teacherFirstName);
+        teacher.setLastName(teacherLastName);
+        teacher.setCourse(course);
+        //teacher.setId();--?
+        boolean result = teacherDao.updateTeacher(teacher);
+        if(result){
+            JOptionPane.showMessageDialog(null,Constants.REGISTER_MASSAGE );
+            setVisible(false);
+        }else JOptionPane.showMessageDialog(this,Constants.ERROR_REGISETR_MASSAGE );
+       
+    }//GEN-LAST:event_jButtonUpdateTeacherActionPerformed
+
+    private void jButtonUpdateCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateCourseActionPerformed
+      
+        String courseName=jTextFieldCourseName.getText();
+        int duration=Integer.parseInt(jTextFieldDuration.getText());
+        Course course=new Course();
+        course.setCourseName(courseName);
+        course.setDuration(duration);
+        //course.setId(); mellimden sorush
+        boolean result=courseDao.updateCourse(course);
+         if(result){
+            JOptionPane.showMessageDialog(null,Constants.REGISTER_MASSAGE );
+            setVisible(false);
+        }else JOptionPane.showMessageDialog(this,Constants.ERROR_REGISETR_MASSAGE );
+    }//GEN-LAST:event_jButtonUpdateCourseActionPerformed
+
+    private void jButtonRegisterCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegisterCourseActionPerformed
+       /*String firstName=jTextFieldTeacherFirstName.getText();
+        String lastName=jTextFieldTeacherLastName.getText();
+        String courseName=(String) jComboBoxCourse1.getSelectedItem();
+        
+        Course course=new Course();
+        course.setId(mapCourse.get(courseName));//mellimden sorush seti niye edirik
+        Teacher teacher=new Teacher(course,firstName,lastName);
+        boolean result =teacherDao.registerNewTeacher(teacher, course);
+         if(result){
+            JOptionPane.showMessageDialog(null,Constants.REGISTER_MASSAGE );
+        }else JOptionPane.showMessageDialog(this,Constants.ERROR_REGISETR_MASSAGE );*/
+       String courseName=jTextFieldCourseName.getText();
+        int duration=Integer.parseInt(jTextFieldDuration.getText());
+        Course course=new Course();
+        course.setCourseName(courseName);
+        course.setDuration(duration);
+        //course.setId(); mellimden sorush
+        boolean result=courseDao.registerNewCourse(course);
+         if(result){
+            JOptionPane.showMessageDialog(null,Constants.REGISTER_MASSAGE );
+            setVisible(false);
+        }else JOptionPane.showMessageDialog(this,Constants.ERROR_REGISETR_MASSAGE );
+    }//GEN-LAST:event_jButtonRegisterCourseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -605,7 +966,7 @@ public class JFrameAdmin extends javax.swing.JFrame {
         jTableTeacher.setModel(dtm);
 
     }
-    /*  private void setCourseTable() {
+     private void setCourseTable() {
         DefaultTableModel dtm = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -622,38 +983,53 @@ public class JFrameAdmin extends javax.swing.JFrame {
             dtm.addRow(new Object[]{c.getId(), c.getCourseName(), c.getDuration()});
         }
         jTableCourse.setModel(dtm);
-    }*/
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAddStudent;
+    private javax.swing.JButton jButtonDeleteCourse;
     private javax.swing.JButton jButtonDeleteStudent;
     private javax.swing.JButton jButtonDeleteTeacher;
+    private javax.swing.JButton jButtonEditCourse;
     private javax.swing.JButton jButtonEditStudent;
     private javax.swing.JButton jButtonEditTeacher;
+    private javax.swing.JButton jButtonRegisterCourse;
     private javax.swing.JButton jButtonRegisterTeacher;
-    private javax.swing.JButton jButtonReset;
-    private javax.swing.JButton jButtonUpdate;
+    private javax.swing.JButton jButtonResetCourse;
+    private javax.swing.JButton jButtonResetTeacher;
+    private javax.swing.JButton jButtonUpdateCourse;
+    private javax.swing.JButton jButtonUpdateTeacher;
     private javax.swing.JComboBox<String> jComboBoxCourse1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
+    private javax.swing.JPanel jPanelCourse;
     private javax.swing.JPanel jPanelStudent;
     private javax.swing.JPanel jPanelStudenttable;
     private javax.swing.JPanel jPanelTeacher;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPanelStudent;
     private javax.swing.JTabbedPane jTabbedAdmin;
+    private javax.swing.JTable jTableCourse;
     private javax.swing.JTable jTableStudent;
     private javax.swing.JTable jTableTeacher;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextFieldCourseName;
+    private javax.swing.JTextField jTextFieldDuration;
+    private javax.swing.JTextField jTextFieldSearchCourse;
     private javax.swing.JTextField jTextFieldSearchStudent;
     private javax.swing.JTextField jTextFieldSearchTeacher;
+    private javax.swing.JTextField jTextFieldTeacherFirstName;
+    private javax.swing.JTextField jTextFieldTeacherLastName;
     // End of variables declaration//GEN-END:variables
 
     private void customInit() {
@@ -671,14 +1047,17 @@ public class JFrameAdmin extends javax.swing.JFrame {
                 jButtonEditTeacher.setEnabled(true);
             }
         });
-
-        List<Course> list = courseDao.getAllCourse();
+         List<Course> list = courseDao.getAllCourse();
         for (Course c : list) {
             jComboBoxCourse1.addItem(c.getCourseName());
+             mapCourse.put(c.getCourseName(),c.getId());
 
         }
 
+       
+
         jComboBoxCourse1.setSelectedIndex(0);
+      
     }
 
 }

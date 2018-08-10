@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface CourseDao {
     List<Course>getAllCourse();
-    
-    
+    boolean deleteCourse(int id);
+    boolean updateCourse(Course course);
+    public Course getCourseById(int id);
+    boolean registerNewCourse(Course course);
 }

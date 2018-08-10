@@ -68,8 +68,7 @@ public class StudentDaoImpl implements StudentDao {
         PreparedStatement psStudent = null;
        
 
-        ResultSet rsCourse = null;
-        ResultSet rsTeacher=null;
+        
         
         boolean result = false;
         String sqlStudent = "insert into student(first_name,last_name,telephone_number,id_teacher)values(?,?,?,?)";

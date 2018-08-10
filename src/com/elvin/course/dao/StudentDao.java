@@ -19,7 +19,7 @@ public interface StudentDao {
     boolean registerNewStudent(Student student,Teacher teacher);
     boolean deleteStudent(int id);
     boolean updateStudent(Student student);
-    public Student getStudentById(int id);
+    Student getStudentById(int id);
     
     
     

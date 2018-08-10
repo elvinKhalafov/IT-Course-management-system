@@ -47,4 +47,108 @@ public class CourseDaoImpl implements CourseDao {
 
     }
 
+    @Override
+    public boolean deleteCourse(int id) {
+         Connection con = null;
+        PreparedStatement ps=null;
+        ResultSet rs=null;
+        String sql="delete from course where id = ?";
+        boolean result=false;
+        try{
+            con = DBUtil.getConnection();
+            ps=con.prepareStatement(sql);
+            ps.setInt(1,id);
+            ps.execute();
+            result=true;
+            
+        }catch(Exception e){
+             e.printStackTrace();
+            
+        }finally{
+            DBUtil.close(con,ps,rs);
+        }
+        return result;
+    }
+
+    @Override
+    public boolean updateCourse(Course course) {
+        boolean result = false;
+        Connection con = null;
+        PreparedStatement ps = null;
+        String sql = "update course set course_name=?,  duration=? where id=?";
+        try {
+            con = DBUtil.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setString(1, course.getCourseName());
+            ps.setInt(2, course.getDuration());
+            ps.setInt(3, course.getId());
+
+            ps.executeUpdate();
+            result = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        } finally {
+            DBUtil.close(con, ps, null);
+        }
+
+        return result;
+    }
+
+    @Override
+    public Course getCourseById(int id) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        Course course=new Course();
+        String sql="select * from course where id=?";
+        try{
+           con = DBUtil.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+            
+            course.setId(rs.getInt("course_id"));
+                course.setCourseName(rs.getString("course_name"));
+                course.setDuration(rs.getInt("duration"));
+            
+            }
+            
+        }catch(Exception e){
+             e.printStackTrace();
+        }finally{
+            DBUtil.close(con, ps, null);
+        }
+        return course;
+    }
+
+    @Override
+    public boolean registerNewCourse(Course course) {
+        Connection con = null;
+        PreparedStatement psCourse = null;
+        ResultSet rsCourse = null;
+
+        boolean result = false;
+        String sqlCourse = "insert into course(course_name,duration)values(?,?)";
+        try{
+            con = DBUtil.getConnection();
+            psCourse = con.prepareStatement(sqlCourse);
+            psCourse.setString(1, course.getCourseName());
+            psCourse.setInt(2,course.getDuration());
+            psCourse.execute();
+            result = true;
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBUtil.close(con, psCourse, null);
+        }
+        return result;
+
+    }
+    
+    
+
 }
