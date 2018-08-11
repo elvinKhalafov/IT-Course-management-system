@@ -149,7 +149,7 @@ public class TeacherDaoImpl implements TeacherDao {
         ResultSet rsCourse = null;
 
         boolean result = false;
-        String sqlTeacher = "insert into teacher(first_name,last_name,id_course)values(?,?,?)";
+        String sqlTeacher = "insert into teachers(first_name,last_name,id_course)values(?,?,?)";
         try {
             con = DBUtil.getConnection();
             psTeacher = con.prepareStatement(sqlTeacher);
@@ -174,7 +174,7 @@ public class TeacherDaoImpl implements TeacherDao {
         boolean result = false;
         Connection con = null;
         PreparedStatement ps = null;
-        String sql = "update teacher set first_name=?,  last_name=?,id_course=? where id=?";
+        String sql = "update teachers set first_name=?,  last_name=?,id_course=? where id=?";
         try {
             con = DBUtil.getConnection();
             ps = con.prepareStatement(sql);
@@ -182,7 +182,7 @@ public class TeacherDaoImpl implements TeacherDao {
             ps.setString(2, teacher.getLastName());
             ps.setInt(3, teacher.getCourse().getId());
 
-            ps.setInt(5, teacher.getId());
+            ps.setInt(4, teacher.getId());
 
             ps.executeUpdate();
             result = true;

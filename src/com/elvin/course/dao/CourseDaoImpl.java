@@ -110,7 +110,7 @@ public class CourseDaoImpl implements CourseDao {
             rs = ps.executeQuery();
             while (rs.next()) {
             
-            course.setId(rs.getInt("course_id"));
+            course.setId(rs.getInt("id"));
                 course.setCourseName(rs.getString("course_name"));
                 course.setDuration(rs.getInt("duration"));
             

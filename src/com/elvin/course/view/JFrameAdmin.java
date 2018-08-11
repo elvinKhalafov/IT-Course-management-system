@@ -32,6 +32,8 @@ public class JFrameAdmin extends javax.swing.JFrame {
     TeacherDao teacherDao = new TeacherDaoImpl();
     CourseDao courseDao = new CourseDaoImpl();
     private Map<String, Integer> mapCourse = new HashMap<>();
+    private  Integer idTeacher; 
+    private Integer idCourse ;
 
     public JFrameAdmin() {
         initComponents();
@@ -347,6 +349,11 @@ public class JFrameAdmin extends javax.swing.JFrame {
 
         jButtonResetTeacher.setText("Reset");
         jButtonResetTeacher.setEnabled(false);
+        jButtonResetTeacher.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonResetTeacherActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -632,12 +639,14 @@ public class JFrameAdmin extends javax.swing.JFrame {
     private void jButtonEditTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditTeacherActionPerformed
         
         
-        jButtonEditTeacher.setEnabled(true);
-         Integer id = (Integer) jTableTeacher.getValueAt(jTableTeacher.getSelectedRow(), 0);
-        Teacher teacher = teacherDao.getTeacherById(id);
+        jButtonUpdateTeacher.setEnabled(true);
+        jButtonRegisterTeacher.setEnabled(false);
+        jButtonResetTeacher.setEnabled(true);
+         idTeacher = (Integer) jTableTeacher.getValueAt(jTableTeacher.getSelectedRow(), 0);
+        Teacher teacher = teacherDao.getTeacherById(idTeacher);
         jTextFieldTeacherFirstName.setText(teacher.getFirstName());
         jTextFieldTeacherLastName.setText(teacher.getLastName());
-        //jComboBoxCourse1 set elemeyi mellimden sorush
+        jComboBoxCourse1.setSelectedItem(teacher.getCourse().getCourseName());
         
         
     }//GEN-LAST:event_jButtonEditTeacherActionPerformed
@@ -746,10 +755,12 @@ public class JFrameAdmin extends javax.swing.JFrame {
     private void jButtonEditCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEditCourseActionPerformed
       
         jButtonUpdateCourse.setEnabled(true);
-         Integer id = (Integer) jTableCourse.getValueAt(jTableCourse.getSelectedRow(), 0);
-         Course course=courseDao.getCourseById(id);
+        jButtonRegisterCourse.setEnabled(false);
+         idCourse = (Integer) jTableCourse.getValueAt(jTableCourse.getSelectedRow(), 0);
+         Course course=courseDao.getCourseById(idCourse);
         jTextFieldCourseName.setText(course.getCourseName());
         jTextFieldDuration.setText(course.getDuration()+"");
+       
     }//GEN-LAST:event_jButtonEditCourseActionPerformed
 
     private void jButtonDeleteCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteCourseActionPerformed
@@ -806,7 +817,7 @@ public class JFrameAdmin extends javax.swing.JFrame {
         String courseName=(String) jComboBoxCourse1.getSelectedItem();
         
         Course course=new Course();
-        course.setId(mapCourse.get(courseName));//mellimden sorush seti niye edirik
+        course.setId(mapCourse.get(courseName));
         Teacher teacher=new Teacher(course,firstName,lastName);
         boolean result =teacherDao.registerNewTeacher(teacher, course);
          if(result){
@@ -828,16 +839,16 @@ public class JFrameAdmin extends javax.swing.JFrame {
          String teacherLastName=jTextFieldTeacherLastName.getText();
          String courseName=(String)jComboBoxCourse1.getSelectedItem();
          Course course=new Course();
-         //??? mellimden sorush
+         course.setId(mapCourse.get(jComboBoxCourse1.getSelectedItem()));
         Teacher teacher=new Teacher();
         teacher.setFirstName(teacherFirstName);
         teacher.setLastName(teacherLastName);
         teacher.setCourse(course);
-        //teacher.setId();--?
+        teacher.setId(idTeacher);
         boolean result = teacherDao.updateTeacher(teacher);
         if(result){
             JOptionPane.showMessageDialog(null,Constants.REGISTER_MASSAGE );
-            setVisible(false);
+           setTeacherTable();
         }else JOptionPane.showMessageDialog(this,Constants.ERROR_REGISETR_MASSAGE );
        
     }//GEN-LAST:event_jButtonUpdateTeacherActionPerformed
@@ -849,38 +860,37 @@ public class JFrameAdmin extends javax.swing.JFrame {
         Course course=new Course();
         course.setCourseName(courseName);
         course.setDuration(duration);
-        //course.setId(); mellimden sorush
+        course.setId(idCourse); 
         boolean result=courseDao.updateCourse(course);
          if(result){
             JOptionPane.showMessageDialog(null,Constants.REGISTER_MASSAGE );
-            setVisible(false);
+            setCourseTable();
         }else JOptionPane.showMessageDialog(this,Constants.ERROR_REGISETR_MASSAGE );
+        
     }//GEN-LAST:event_jButtonUpdateCourseActionPerformed
 
     private void jButtonRegisterCourseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegisterCourseActionPerformed
-       /*String firstName=jTextFieldTeacherFirstName.getText();
-        String lastName=jTextFieldTeacherLastName.getText();
-        String courseName=(String) jComboBoxCourse1.getSelectedItem();
-        
-        Course course=new Course();
-        course.setId(mapCourse.get(courseName));//mellimden sorush seti niye edirik
-        Teacher teacher=new Teacher(course,firstName,lastName);
-        boolean result =teacherDao.registerNewTeacher(teacher, course);
-         if(result){
-            JOptionPane.showMessageDialog(null,Constants.REGISTER_MASSAGE );
-        }else JOptionPane.showMessageDialog(this,Constants.ERROR_REGISETR_MASSAGE );*/
+    
        String courseName=jTextFieldCourseName.getText();
         int duration=Integer.parseInt(jTextFieldDuration.getText());
         Course course=new Course();
         course.setCourseName(courseName);
         course.setDuration(duration);
-        //course.setId(); mellimden sorush
+       
         boolean result=courseDao.registerNewCourse(course);
          if(result){
             JOptionPane.showMessageDialog(null,Constants.REGISTER_MASSAGE );
-            setVisible(false);
+            setCourseTable();
         }else JOptionPane.showMessageDialog(this,Constants.ERROR_REGISETR_MASSAGE );
     }//GEN-LAST:event_jButtonRegisterCourseActionPerformed
+
+    private void jButtonResetTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonResetTeacherActionPerformed
+        jTextFieldTeacherFirstName.setText("");
+        jTextFieldTeacherLastName.setText("");
+        jComboBoxCourse1.setSelectedIndex(0);
+        jButtonUpdateTeacher.setEnabled(false);
+        jButtonRegisterTeacher.setEnabled(true);
+    }//GEN-LAST:event_jButtonResetTeacherActionPerformed
 
     /**
      * @param args the command line arguments
@@ -934,6 +944,7 @@ public class JFrameAdmin extends javax.swing.JFrame {
         dtm.addColumn("Course duration");
 
         List<Student> list = studentDao.getAllStudent();
+        System.out.println(list);
 
         for (Student s : list) {
             String fullName = s.getFirstName() + " " + s.getLastName();
@@ -1045,6 +1056,13 @@ public class JFrameAdmin extends javax.swing.JFrame {
             public void valueChanged(ListSelectionEvent e) {
                 jButtonDeleteTeacher.setEnabled(true);
                 jButtonEditTeacher.setEnabled(true);
+            }
+        });
+        jTableCourse.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                jButtonEditCourse.setEnabled(true);
+                jButtonDeleteCourse.setEnabled(true);
             }
         });
          List<Course> list = courseDao.getAllCourse();

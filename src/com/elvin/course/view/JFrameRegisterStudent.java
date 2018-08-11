@@ -312,6 +312,7 @@ public class JFrameRegisterStudent extends javax.swing.JFrame {
         boolean result = studentDao.registerNewStudent(student, teacher);
         if(result){
             JOptionPane.showMessageDialog(null,Constants.REGISTER_MASSAGE );
+            this.setVisible(false);
         }else JOptionPane.showMessageDialog(this,Constants.ERROR_REGISETR_MASSAGE );
         
       

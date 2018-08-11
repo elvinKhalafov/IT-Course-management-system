@@ -28,7 +28,7 @@ public class StudentDaoImpl implements StudentDao {
         ResultSet rs = null;
         List<Student> list = new ArrayList<>();
         String sql = "select s.id as student_id, s.first_name as student_first_name, s.last_name as student_last_name, s.telephone_number, t.id as teacher_id, t.first_name as teacher_first_name, t.last_name as teacher_last_name,c.id as course_id, c.course_name, c.duration from student s inner join teachers t on s.id_teacher=t.id \n"
-                + "inner join course c on t.id_course=c.id";
+                + "inner join course c on t.id_course=c.id order by s.id";
         try {
             con = DBUtil.getConnection();
             ps = con.prepareStatement(sql);

@@ -40,7 +40,7 @@ public class JFrameLogin extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jComboBoxRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Role", "Admin", "Receptionist", " " }));
+        jComboBoxRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Role", "Admin", "Receptionist" }));
 
         jTextFieldUsername.setText("Username");
         jTextFieldUsername.addFocusListener(new java.awt.event.FocusAdapter() {
