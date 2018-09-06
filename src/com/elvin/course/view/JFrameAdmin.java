@@ -10,6 +10,7 @@ import com.elvin.course.dao.TeacherDaoImpl;
 import com.elvin.course.model.Course;
 import com.elvin.course.model.Student;
 import com.elvin.course.model.Teacher;
+import com.elvin.course.model.User;
 import java.awt.Color;
 
 import java.util.HashMap;
@@ -28,9 +29,9 @@ import javax.swing.table.TableRowSorter;
  */
 public class JFrameAdmin extends javax.swing.JFrame {
 
-    StudentDao studentDao = new StudentDaoImpl();
-    TeacherDao teacherDao = new TeacherDaoImpl();
-    CourseDao courseDao = new CourseDaoImpl();
+    private StudentDao studentDao = new StudentDaoImpl();
+    private TeacherDao teacherDao = new TeacherDaoImpl();
+    private CourseDao courseDao = new CourseDaoImpl();
     private Map<String, Integer> mapCourse = new HashMap<>();
     private  Integer idTeacher; 
     private Integer idCourse ;
@@ -41,6 +42,9 @@ public class JFrameAdmin extends javax.swing.JFrame {
         setStudentTable();
         setTeacherTable();
         setCourseTable();
+    }
+    public JFrameAdmin(User user){
+       user=new User();
     }
 
     /**
@@ -58,7 +62,6 @@ public class JFrameAdmin extends javax.swing.JFrame {
         jPanelStudenttable = new javax.swing.JPanel();
         jScrollPanelStudent = new javax.swing.JScrollPane();
         jTableStudent = new javax.swing.JTable();
-        jButtonAddStudent = new javax.swing.JButton();
         jButtonEditStudent = new javax.swing.JButton();
         jButtonDeleteStudent = new javax.swing.JButton();
         jTextFieldSearchStudent = new javax.swing.JTextField();
@@ -117,7 +120,7 @@ public class JFrameAdmin extends javax.swing.JFrame {
             .addGap(0, 453, Short.MAX_VALUE)
         );
 
-        jTabbedAdmin.addTab("tab1", jPanel1);
+        jTabbedAdmin.addTab("Admin", jPanel1);
 
         jTableStudent.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -148,13 +151,6 @@ public class JFrameAdmin extends javax.swing.JFrame {
                 .addComponent(jScrollPanelStudent, javax.swing.GroupLayout.DEFAULT_SIZE, 316, Short.MAX_VALUE)
                 .addContainerGap())
         );
-
-        jButtonAddStudent.setText("Add");
-        jButtonAddStudent.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAddStudentActionPerformed(evt);
-            }
-        });
 
         jButtonEditStudent.setText("Edit");
         jButtonEditStudent.setEnabled(false);
@@ -192,18 +188,16 @@ public class JFrameAdmin extends javax.swing.JFrame {
             jPanelStudentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelStudentLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanelStudenttable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanelStudentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanelStudenttable, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanelStudentLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jTextFieldSearchStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonDeleteStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButtonEditStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
-            .addGroup(jPanelStudentLayout.createSequentialGroup()
-                .addGap(171, 171, 171)
-                .addComponent(jTextFieldSearchStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButtonDeleteStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButtonEditStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButtonAddStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelStudentLayout.setVerticalGroup(
             jPanelStudentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -214,8 +208,7 @@ public class JFrameAdmin extends javax.swing.JFrame {
                 .addGroup(jPanelStudentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldSearchStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButtonDeleteStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonEditStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonAddStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButtonEditStudent, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -829,11 +822,6 @@ public class JFrameAdmin extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButtonRegisterTeacherActionPerformed
 
-    private void jButtonAddStudentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAddStudentActionPerformed
-        new JFrameRegisterStudent().setVisible(true);
-       
-    }//GEN-LAST:event_jButtonAddStudentActionPerformed
-
     private void jButtonUpdateTeacherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateTeacherActionPerformed
          String teacherFirstName=jTextFieldTeacherFirstName.getText();
          String teacherLastName=jTextFieldTeacherLastName.getText();
@@ -997,7 +985,6 @@ public class JFrameAdmin extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonAddStudent;
     private javax.swing.JButton jButtonDeleteCourse;
     private javax.swing.JButton jButtonDeleteStudent;
     private javax.swing.JButton jButtonDeleteTeacher;

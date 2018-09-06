@@ -37,7 +37,7 @@ public class UserDaoImpl implements UserDao{
                 user.setRole(rs.getInt("role"));
                 user.setUsername(username);
                 user.setPassword(password);
-                user.setImage(rs.getString("image"));
+               
                 
           
              }
